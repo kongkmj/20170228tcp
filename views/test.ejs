@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+    <style>
+    *{ margin:0; padding:0; box-sizing: border-box;}
+    body {font:13px Helvetica, Arial;}
+
+
+
+    #messages {
+    list-style-type: none;
+    margin: 0;
+    padding:0;
+    }
+    #messages li {
+    padding:5px 10px;
+    }
+    #message li:nth-child(odd) {
+    background:#eee;
+    }
+    </style>
+  </head>
+  <body>
+
+
+    <form action="/input" method ="post">
+        <input type= "text" id="m" name="test" value=""/>
+        <input type ="button" id= "sendbutton"name="sendbutton" value="전송"/>
+    </form>
+    <h2>데이터 교환</h2>
+    <div id="tcpk1"></div>
+
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="js/jquery.min.js"></script>
+    <script>
+      var socket = io.connect("http://192.168.0.9:3000");
+
+
+      socket.on('recieveData',function (data) {
+        console.log(data);
+        $('#tcpk1').append('<h5 style="color:red;">'+"수신 데이터 : "+data+'</h5>');
+      });
+
+      $('#sendbutton').click(function () {
+      socket.emit('senddata',$('#m').val());
+      $('#m').val('');
+      return false;
+    });
+    socket.on('senddata2',function (msg) {
+      $('#tcpk1').append('<h5 style="color:blue;">'+"송신 데이터 : "+msg+'</h5>');
+    })
+    </script>
+
+
+  </body>
+</html>
